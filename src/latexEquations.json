@@ -1,0 +1,483 @@
+{
+    "libraryEquations": [
+        {
+            "title": "Area of circle",
+            "latex": "A = \\pi r^2"
+        },
+        {
+            "title": "Quadratic equation",
+            "latex": "x = \\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}"
+        },
+        {
+            "title": "Binomial theorem",
+            "latex": "(x+a)^n = \\sum _{k=0}^n(\\frac{n_{ }}{k})x^ka^{n-k}"
+        },
+        {
+            "title": "Expansion of a sum",
+            "latex": "(1+x)^n=1+\\frac{nx}{1!}+\\frac{n(n-1)x^2}{2!}+......."
+        },
+        {
+            "title": "Fourier series",
+            "latex": "f(x)=a_0+\\sum _{n=1}^{\\infty }(a_n\\cos \\frac{n\\Pi x}{L}+b_n\\sin \\frac{n\\Pi x}{L})"
+        },
+        {
+            "title": "Slope of a line",
+            "latex": "m=\\frac{y_2-y_1}{x_2-x_1}"
+        },
+        {
+            "title": "Distance between two points",
+            "latex": "d=\\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}"
+        },
+        {
+            "title": "Volume of a sphere",
+            "latex": "\\frac{4}{3}\\pi r^3"
+        },
+        {
+            "title": "Product rule",
+            "latex": "a^n\\times a^m=a^{n+m}"
+        }
+    ],
+    "symbols": {
+        "greek": [
+            {
+                "latex": "\\alpha"
+            },
+            {
+                "latex": "\\beta"
+            },
+            {
+                "latex": "\\delta"
+            },
+            {
+                "latex": "\\epsilon"
+            },
+            {
+                "latex": "\\eta"
+            },
+            {
+                "latex": "\\gamma"
+            },
+            {
+                "latex": "\\iota"
+            },
+            {
+                "latex": "\\kappa"
+            },
+            {
+                "latex": "\\lambda"
+            },
+            {
+                "latex": "\\mu"
+            },
+            {
+                "latex": "\\nu"
+            },
+            {
+                "latex": "o"
+            },
+            {
+                "latex": "\\omega"
+            },
+            {
+                "latex": "\\phi"
+            },
+            {
+                "latex": "\\pi"
+            },
+            {
+                "latex": "\\psi"
+            },
+            {
+                "latex": "\\rho"
+            },
+            {
+                "latex": "\\sigma"
+            },
+            {
+                "latex": "\\tau"
+            },
+            {
+                "latex": "\\theta"
+            },
+            {
+                "latex": "\\upsilon"
+            },
+            {
+                "latex": "\\xi"
+            },
+            {
+                "latex": "\\zeta"
+            },
+            {
+                "latex": "\\Delta"
+            },
+            {
+                "latex": "\\Gamma"
+            },
+            {
+                "latex": "\\Lambda"
+            },
+            {
+                "latex": "\\Omega"
+            },
+            {
+                "latex": "\\Phi"
+            },
+            {
+                "latex": "\\Pi"
+            },
+            {
+                "latex": "\\Psi"
+            },
+            {
+                "latex": "\\Sigma"
+            },
+            {
+                "latex": "\\Theta"
+            },
+            {
+                "latex": "\\Upsilon"
+            }
+        ],
+        "binary": [{
+                "latex": "\\ast"
+            },
+            {
+                "latex": "\\times"
+            },
+            {
+                "latex": "\\div"
+            },
+            {
+                "latex": "\\cdot"
+            },
+            {
+                "latex": "\\equiv"
+            },
+            {
+                "latex": "\\cong"
+            },
+            {
+                "latex": "\\ne"
+            },
+            {
+                "latex": "\\sim"
+            },
+            {
+                "latex": "\\simeq"
+            },
+            {
+                "latex": "\\approx"
+            },
+            {
+                "latex": "\\propto"
+            },
+            {
+                "latex": "\\models"
+            },
+            {
+                "latex": "\\pm"
+            },
+            {
+                "latex": "\\mp"
+            },
+            {
+                "latex": "\\leq"
+            },
+            {
+                "latex": "\\ll"
+            },
+            {
+                "latex": "\\subset"
+            },
+            {
+                "latex": "\\subseteq"
+            },
+            {
+                "latex": "\\in"
+            },
+            {
+                "latex": "\\perp"
+            },
+            {
+                "latex": "\\mid"
+            },
+            {
+                "latex": "\\parallel"
+            },
+            {
+                "latex": "\\notin"
+            },
+            {
+                "latex": "\\cap"
+            },
+            {
+                "latex": "\\cup"
+            },
+            {
+                "latex": "\\geq"
+            },
+            {
+                "latex": "\\wedge"
+            },
+            {
+                "latex": "\\vee"
+            },
+            {
+                "latex": "\\gg"
+            },
+            {
+                "latex": "\\supset"
+            },
+            {
+                "latex": "\\supseteq"
+            },
+            {
+                "latex": "a^b"
+            },
+            {
+                "latex": "\\lt"
+            },
+            {
+                "latex": "\\gt"
+            },
+            {
+                "latex": "\\+"
+            },
+            {
+                "latex": "\\-"
+            }
+        ],
+        "arrow": [{
+                "latex": "\\leftarrow"
+            },
+            {
+                "latex": "\\Leftarrow"
+            },
+            {
+                "latex": "\\rightarrow"
+            },
+            {
+                "latex": "\\Rightarrow"
+            },
+            {
+                "latex": "\\leftrightarrow"
+            },
+            {
+                "latex": "\\Leftrightarrow"
+            },
+            {
+                "latex": "\\rightharpoonup"
+            },
+            {
+                "latex": "\\rightharpoondown"
+            }
+        ],
+        "misc": [{
+                "latex": "\\infty"
+            },
+            {
+                "latex": "\\nabla"
+            },
+            {
+                "latex": "\\partial"
+            },
+            {
+                "latex": "\\angle"
+            },
+            {
+                "latex": "\\measuredangle"
+            },
+            {
+                "latex": "\\triangle"
+            },
+            {
+                "latex": "\\square"
+            },
+            {
+                "latex": "\\overrightarrow{AB}"
+            },
+            {
+                "latex": "A^T"
+            },
+            {
+                "latex": "A^{-1}"
+            },
+            {
+                "latex": "^c"
+            },
+            {
+                "latex": "^g"
+            },
+            {
+                "latex": "\\overline{x}"
+            },
+            {
+                "latex": "\\vec{x}"
+            },
+            {
+                "latex": "\\hat{x}"
+            }
+        ]
+    },
+    "equations": {
+        "trig": [{
+                "latex": "\\sin\\theta"
+            },
+            {
+                "latex": "\\cos\\theta"
+            },
+            {
+                "latex": "\\sec\\theta"
+            },
+            {
+                "latex": "\\csc\\theta"
+            },
+            {
+                "latex": "\\tan\\theta"
+            },
+            {
+                "latex": "\\cot\\theta"
+            },
+            {
+                "latex": "\\log_{}\\left(\\right)",
+                "latexDisplay": "\\log_{b}a"
+            },
+            {
+                "latex": "\\lg"
+            },
+            {
+                "latex": "\\ln"
+            },
+            {
+                "latex": "\\lim_{x\\to\\infty}\\left(\\right)",
+                "latexDisplay": "lim"
+            },
+            {
+                "latex": "\\dim"
+            },
+            {
+                "latex": "y^{(n)}"
+            },
+            {
+                "latex": "\\frac{dy}{dx}"
+            },
+            {
+                "latex": "\\frac{d^2y}{dx^2}"
+            },
+            {
+                "latex": "\\frac{d^ny}{dx^n}"
+            },
+            {
+                "latex": "\\frac{\\partial f(x,y)}{\\partial x}"
+            },
+            {
+                "latex": "\\int "
+            },
+            {
+                "latex": "\\int _{ }^{ }"
+            },
+            {
+                "latex": "\\oint"
+            }
+        ],
+        "supsub": [{
+                "latex": "x^2",
+                "latexDisplay": "x^2"
+            },
+            {
+                "latex": "e^{ }",
+                "latexDisplay": "e^{\\square}"
+            },
+            {
+                "latex": "{ }^{ }",
+                "latexDisplay": "\\square^\\square"
+            },
+            {
+                "latex": "x_2",
+                "latexDisplay": "x_2"
+            },
+            {
+                "latex": "{ }_{ }",
+                "latexDisplay": "\\square_\\square"
+            }
+        ],
+        "root": [{
+                "latexCmd": "\\sqrt",
+                "latexDisplay": "\\sqrt{\\square}"
+            },
+            {
+                "latexCmd": "\\nthroot",
+                "latexDisplay": "\\sqrt[\\square]{\\square}"
+            },
+            {
+                "latex": "\\sqrt[3]{}",
+                "latexDisplay": "\\sqrt[3]{a}"
+            },
+            {
+                "latex": "\\sqrt[4]{}",
+                "latexDisplay": "\\sqrt[4]{a}"
+            }
+        ],
+        "frac": [{
+            "latex": "\\frac{ }{ }",
+            "latexDisplay": "\\frac{\\square}{\\square}"
+        }],
+        "misc": [{
+                "latex": "\\sigma^2",
+                "latexDisplay": "\\sigma^2"
+            },
+            {
+                "latex": "\\sigma_X",
+                "latexDisplay": "\\sigma_X"
+            },
+            { 
+                "latex": "\\rho_{X,Y}",
+                "latexDisplay": "\\rho_{X,Y}"
+            },
+            {
+                "latex": "_n P^k",
+                "latexDisplay": "_n P^k"
+            },
+            {
+                "latex": "_n C^k",
+                "latexDisplay": "_n C^k"
+            },
+            {
+                "latex": "\\binom{n}{k}"
+            }
+        ]
+    },
+    "advancedSymbols": [
+        {
+            "latexText": "\\begin{vmatrix} a&b\\\\ c&d\\\\ \\end{vmatrix}"
+        },
+        {
+            "latexText": "\\begin{matrix} a&b\\\\ c&d\\\\ \\end{matrix}"
+        },
+        {
+            "latexText": "\\begin{bmatrix} a&b\\\\ c&d\\\\ \\end{bmatrix}"
+        },
+        {
+            "latexText": "\\xrightarrow{\\Delta}"
+        },
+        {
+            "latexText": "\\sphericalangle"
+        },
+        {
+            "latexText": "\\xleftrightharpoons{abc}",
+            "customImage": "assets/equilibrium.png"
+        },
+        {
+            "latexText": "\\leftrightarrows"
+        },
+        {
+            "latexText": "\\widetilde{a}"
+        },
+        {
+            "latexText": "\\overgroup{AB}",
+            "customImage": "assets/arc.png"
+        }
+    ],
+    "advancedTabImageArray": []
+}

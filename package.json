@@ -8,7 +8,11 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "bootstrap": "^4.4.1",
+    "bootstrap-vue": "^2.1.0",
     "core-js": "^3.4.3",
+    "jquery": "^3.4.1",
+    "katex": "^0.11.1",
     "vue": "^2.6.10"
   },
   "devDependencies": {
@@ -21,15 +25,19 @@
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
-    "root": true,
+    "root": false,
     "env": {
-      "node": true
+      "node": false
     },
     "extends": [
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "strict": "off",
+      "no-console": "off",
+      "no-inline-comments": "off"
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
