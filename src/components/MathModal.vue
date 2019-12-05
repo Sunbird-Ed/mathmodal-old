@@ -1,13 +1,18 @@
 <template>
     <div>
         <h1>Math Modal</h1>
-        <b-button v-b-modal.modal-1>Equation</b-button>
+        <b-button v-b-modal.mathModal>Equation</b-button>
 
-        <b-modal class="mathModal"  id="modal-1" 
+        <b-modal class="mathModal"  id="mathModal" 
                     title="BootstrapVue"
                     :scrollable=true
                     :hide-footer=true
-                    :hide-header=true>
+                    :hide-header=true
+                    ref="mathModal" >
+
+            <slot modal-header>
+                <b-button class="modal-close-btn" size="sm" @click="closeModal()">x</b-button>
+            </slot>
             
             <b-card no-body>
                 <b-tabs content-class="mt-3" justified small card>
@@ -18,29 +23,30 @@
                     <b-tab title="Symbols">
                         <div class="ui right aligned grid">
                             <div class="right floated right aligned six wide column">
-                                <select class="ui dropdown symbols-dropdown">
-                                    <option value="all" selected="selected">All Symbols</option>
+                                <b-form-select v-model="symbolSelected" class="mb-3">
+                                    <option value="all">All Symbols</option>
                                     <option value="greek">Greek and Hebrew letters</option>
                                     <option value="binary">Binary Operation/Relation Symbols</option>
                                     <option value="arrow">Arrows</option>
                                     <option value="misc">Miscellaneous</option>
-                                </select>
+                                </b-form-select>
                             </div>
                         </div>
-                        <div class="ui grid symbolGroup" id="symbolGreek">
+
+                        <div class="ui grid symbolGroup" id="symbolGreek" v-show="symbolSelected == 'all' || symbolSelected == 'greek' ">
                             <div>Greek and Hebrew letters</div>
                             <ul v-html="this.symbol.Greek"></ul>
                         </div>
 
-                        <div class="ui grid symbolGroup" id="symbolBinary">
+                        <div class="ui grid symbolGroup" id="symbolBinary" v-show="symbolSelected == 'all' || symbolSelected == 'binary' ">
                             <div class="sixteen wide column">Binary Operation/Relation Symbols</div>
                             <ul v-html="this.symbol.Binary"></ul>
                         </div>
-                        <div class="ui grid symbolGroup" id="symbolArrow">
+                        <div class="ui grid symbolGroup" id="symbolArrow" v-show="symbolSelected == 'all' || symbolSelected == 'arrow' ">
                             <div class="sixteen wide column">Arrows</div>
                             <ul v-html="this.symbol.Arrow"></ul>
                         </div>
-                        <div class="ui grid symbolGroup" id="symbolMisc">
+                        <div class="ui grid symbolGroup" id="symbolMisc" v-show="symbolSelected == 'all' || symbolSelected == 'misc' ">
                             <div class="sixteen wide column">Miscellaneous</div>
                             <ul v-html="this.symbol.Misc"></ul>
                         </div>
@@ -48,38 +54,45 @@
 
                     <b-tab title="Equations">
                         <div class="right floated right aligned six wide column">
-                            <select class="ui dropdown equations-dropdown">
-                                <option value="all" selected="selected">All Equations</option>
+                            <b-form-select v-model="equSelected" class="mb-3">
+                                <option value="all">All Equations</option>
                                 <option value="trig">Trigonometric functions</option>
                                 <option value="supsub">Superscripts and subscripts</option>
                                 <option value="frac">Fractions</option>
                                 <option value="misc">Miscellaneous</option>
-                            </select>
+                            </b-form-select>
                         </div>
 
-                        <div class="ui grid equationGroup" id="equationTrig">
+                        <div class="ui grid equationGroup" id="equationTrig"  v-show="equSelected == 'all' || equSelected == 'trig' ">
                             <div class="sixteen wide column">Trigonometric functions</div>
                             <ul v-html="this.equation.Trig"></ul>
                         </div>
-                        <div class="ui grid equationGroup" id="equationSupsub">
+                        <div class="ui grid equationGroup" id="equationSupsub" v-show="equSelected == 'all' || equSelected == 'supsub' ">
                             <div class="sixteen wide column">Superscripts and subscripts</div>
                             <ul v-html="this.equation.Supsub"></ul>
                         </div>
-                        <div class="ui grid equationGroup" id="equationRoot">
+                        <div class="ui grid equationGroup" id="equationRoot" v-show="equSelected == 'all' ">
                             <div class="sixteen wide column">Roots</div>
                             <ul v-html="this.equation.Root"></ul>
                         </div>
-                        <div class="ui grid equationGroup" id="equationFrac">
+                        <div class="ui grid equationGroup" id="equationFrac" v-show="equSelected == 'all' || equSelected == 'frac' ">
                             <div class="sixteen wide column">Fractions</div>
                             <ul v-html="this.equation.Frac"></ul>
                         </div>
-                        <div class="ui grid equationGroup" id="equationMisc">
+                        <div class="ui grid equationGroup" id="equationMisc" v-show="equSelected == 'all' || equSelected == 'misc' ">
                             <div class="sixteen wide column">Miscellaneous</div>
                             <ul v-html="this.equation.Misc"></ul>
                         </div>
                     </b-tab>
 
-                    <b-tab title="Advanced"><p>Advanced</p></b-tab>
+                    <b-tab title="Advanced">
+                        <div class="sixteen wide column">Advanced symbols and equations
+                            <a href="https://katex.org/docs/supported.html" target="_blank"><i class="info circle icon"></i>
+                            </a>
+                        </div>
+                        <ul v-html="this.advancedSymbols"></ul>
+                    </b-tab>
+
                 </b-tabs>
             </b-card>
             
@@ -114,12 +127,14 @@
 
 <script>
 import katex from 'katex';
-import json from '../latexEquations.json'
+import json from '../latexEquations.json'   
 export default {
     name: 'MathModal',
     data() {
         return {
             libEquation: "",
+            equSelected: 'all',
+            symbolSelected: 'all',
             symbol: {
                 Greek: "",
                 Binary: "",
@@ -132,7 +147,8 @@ export default {
                 Root: "",
                 Frac: "",
                 Misc: ""
-            }
+            },
+            advancedSymbols: ""
         }
     },
     mounted () {
@@ -146,6 +162,7 @@ export default {
         this.generateEquationView(json.equations.root, 'Root');
         this.generateEquationView(json.equations.frac, 'Frac');
         this.generateEquationView(json.equations.misc, 'Misc');
+        this.generateAdvancedSymbolsView(json.advancedSymbols, 'advancedSymbols');
         
         var mqSymbol = document.getElementsByClassName("mq-render");
         for(var i = 0; i < mqSymbol.length; i++){
@@ -156,6 +173,10 @@ export default {
     },
 
     methods: {
+        closeModal() {
+            this.$refs['mathModal'].hide()
+        },
+        
         generateLibraryView(equations, name) {
             let eqData = "";
             for (var index = 0; index < equations.length; index++) {
@@ -210,11 +231,67 @@ export default {
             this.equation[name] = html;
         },
 
+        generateAdvancedSymbolsView(equations, name) {
+            var advancedTabImageArray = [];
+            equations.forEach(function(value) {
+                let url;
+                if (value.customImage) {
+                    url = value.customImage;
+                } else {
+                    url = "https://latex.codecogs.com/gif.latex?" + encodeURIComponent(value.latexText);
+                    console.log(url);
+                }
+                advancedTabImageArray.push(url);
+            }); 
+            
+            var html = '';
+            var equation = '';
+            for (var index = 0; index < equations.length; index++) {
+                equation = equations[index];
+                html += '<li class="math-symbols"><span class="advanc-symbol-div">' +
+                    '<div class="math-symbol" id="' + name + index + '" onclick=\'latexToEquations(' + JSON.stringify(equation) + ')\'>' +
+                    '<img src="' + advancedTabImageArray[index] + '">' +
+                    '</div> </span>' +
+                    '</div></div></li>';
+            }
+            this.advancedSymbols = html;
+        },
+
         renderToString (string) {
             return katex.renderToString(string, {
                 throwOnError: false
             });
-        }
+        },
+
+        // latexToEquations(object) {
+        //     if (advanceField === true || advanceField === 'true') {
+        //         if (object.latexCmd) {
+        //             insertTextAtCursor(object.latexValue);
+        //         } else if (object.latex) {
+        //             insertTextAtCursor(object.latex);
+        //         } else {
+        //             insertTextAtCursor(object.latexText);
+        //         }
+        //     } else {
+        //         if (object.latexCmd) {
+        //             mathField.cmd(object.latexCmd);
+        //         } else if (object.latex) {
+        //             mathField.write(object.latex);
+        //         } else {
+        //             insertTextAtCursor(object.latexText);
+        //         }
+        //     }
+        // },
+
+        // insertTextAtCursor(text) {
+        //     const input = document.getElementById('advInput')
+        //     input.setRangeText(
+        //         text,
+        //         input.selectionStart,
+        //         input.selectionEnd,
+        //         'end'
+        //     )
+        // }
     },
     
 
@@ -223,9 +300,25 @@ export default {
 
 <style>
 
-
+.modal-close-btn {
+    position: absolute;
+    z-index: 100;
+    right: 10px;
+    top: 9px;
+    background-color: #615c5c;
+    border-radius: 50%;
+    padding: 0px 7px;
+    line-height: 20px;
+    vertical-align: middle;
+    color: #fff;
+    border-color: #615c5c;
+}
 /* Tab header */
 
+.modal-body .tab-content {
+    height: 280px;
+    overflow: auto;
+}
 .items > .item {
     display: -webkit-box;
     display: -ms-flexbox;
