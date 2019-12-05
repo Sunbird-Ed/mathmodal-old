@@ -11,6 +11,7 @@
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.1.0",
     "core-js": "^3.4.3",
+    "expose-loader": "^0.7.5",
     "jquery": "^3.4.1",
     "katex": "^0.11.1",
     "vue": "^2.6.10"
@@ -36,7 +37,8 @@
     "rules": {
       "strict": "off",
       "no-console": "off",
-      "no-inline-comments": "off"
+      "no-inline-comments": "off",
+      "no-undef": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint"

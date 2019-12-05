@@ -15,12 +15,20 @@
             </slot>
             
             <b-card no-body>
-                <b-tabs content-class="mt-3" justified small card>
-                    <b-tab title="Library" active>
-                        <div class="items" v-html="libEquation"></div>
+                <b-tabs content-class="mt-3" justified small card   >
+                    <b-tab title="Library" active  @click=changeTab>
+                        <div class="item select list-items math-lib" 
+                            @click=latexToEquations(item.equation)
+                            v-for="item in this.libEquation" :key="item.id"
+                            >
+                            <div class="middle aligned content">
+                                <div class="math-lib-header">{{item.title}}</div>
+                                <div class="meta math-lib-meta" id="item.id" v-html="item.equationHtml"></div>
+                            </div>
+                        </div>
                     </b-tab>
 
-                    <b-tab title="Symbols">
+                    <b-tab title="Symbols" @click=changeTab>
                         <div class="ui right aligned grid">
                             <div class="right floated right aligned six wide column">
                                 <b-form-select v-model="symbolSelected" class="mb-3">
@@ -52,7 +60,7 @@
                         </div>
                     </b-tab>
 
-                    <b-tab title="Equations">
+                    <b-tab title="Equations" @click=changeTab>
                         <div class="right floated right aligned six wide column">
                             <b-form-select v-model="equSelected" class="mb-3">
                                 <option value="all">All Equations</option>
@@ -85,7 +93,7 @@
                         </div>
                     </b-tab>
 
-                    <b-tab title="Advanced">
+                    <b-tab title="Advanced" @click=changeTab>
                         <div class="sixteen wide column">Advanced symbols and equations
                             <a href="https://katex.org/docs/supported.html" target="_blank"><i class="info circle icon"></i>
                             </a>
@@ -102,12 +110,7 @@
                     <small id="text_hint" style="">Please switch to advanced tab to copy paste LaTeX</small>
                     <b-row>
                         <b-col cols="9"  id="advanceFieldMath" style="display: none;">
-                            <span id="math-field" class="mq-editable-field mq-math-mode">
-                                <span class="mq-textarea">
-                                    <textarea autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" x-palm-disable-ste-all="true"></textarea>
-                                    </span>
-                                    <span class="mq-root-block mq-empty" mathquill-block-id="481"></span>
-                                </span>
+                            <span id="math-field"></span>
                             <span id="latex"></span>
                         </b-col>
                         <b-col cols="9" id="advanceFieldInput">
@@ -128,6 +131,8 @@
 <script>
 import katex from 'katex';
 import json from '../latexEquations.json'   
+var MQ;
+var mathField, latexSpan;
 export default {
     name: 'MathModal',
     data() {
@@ -148,10 +153,14 @@ export default {
                 Frac: "",
                 Misc: ""
             },
-            advancedSymbols: ""
+            advancedSymbols: "",
+            advanceField: false,
+            valid: false
         }
     },
     mounted () {
+        MQ = MathQuill.getInterface(2);
+        
         this.generateLibraryView(json.libraryEquations, 'libFormula');
         this.generateSymbolView(json.symbols.greek, 'Greek');
         this.generateSymbolView(json.symbols.binary, 'Binary');
@@ -164,31 +173,74 @@ export default {
         this.generateEquationView(json.equations.misc, 'Misc');
         this.generateAdvancedSymbolsView(json.advancedSymbols, 'advancedSymbols');
         
-        var mqSymbol = document.getElementsByClassName("mq-render");
-        for(var i = 0; i < mqSymbol.length; i++){
-            console.log(mqSymbol[i])
-            //let element = mqSymbol[i]
-            //MQ.StaticMath(element);
-        }
+        this.$root.$on('bv::modal::shown', () => {
+            var mathFieldSpan = document.getElementById('math-field');
+            latexSpan = document.getElementById('latex');
+            //hiddenSpanArea = document.getElementById('hiddenSpan');
+            mathField = MQ.MathField(mathFieldSpan, {
+                spaceBehavesLikeTab: true,
+                handlers: {
+                    edit: function() {
+                        latexSpan.textContent = mathField.latex();
+                        $('#advInput').val(latexSpan.textContent);
+                        this.valid = true;
+                    }
+                }
+            });
+            window.mathField = mathField;
+            $(mathFieldSpan).keydown(function(e) {
+                if (e.keyCode == 86 || e.keycode == 13) { //keycode value for "v"
+                    setTimeout(function() {
+                        if (!valid) { // checks if the pasted value is not valid
+                            // ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            //   title: 'Incorrect formula entered.',
+                            //   position: 'topCenter',
+                            // });
+                            alert("Incorrect formula entered.");
+                        }
+                        valid = false;
+                    }, 1);
+                }
+            });
+        });
+
     },
 
     methods: {
         closeModal() {
             this.$refs['mathModal'].hide()
         },
+
+        changeTab(evt) {
+            if(evt.currentTarget.text == 'Symbols') {
+                var mqSymbol = document.getElementsByClassName("mq-render");
+                for(var i = 0; i < mqSymbol.length; i++){
+                    let element = mqSymbol[i]
+                    MQ.StaticMath(element);
+                }
+            }
+        },
         
         generateLibraryView(equations, name) {
-            let eqData = "";
+            //let eqData = "";
+            let eqDataArray = []
             for (var index = 0; index < equations.length; index++) {
                 var equation = equations[index];
                 var equationHtml = this.renderToString(equation.latex);
-                eqData += '<div class="item select list-items math-lib" onclick=\'latexToEquations(' + JSON.stringify(equation) + ')\'>' +
-                    '<div class="middle aligned content">' +
-                    '<div class="math-lib-header">' + equation.title + '</div>' +
-                    '<div class="meta math-lib-meta" id="' + name + index + '">' + equationHtml + '</div>' +
-                    '</div></div>';
+                // eqData += '<div class="item select list-items math-lib" @click=\'latexToEquations(' + JSON.stringify(equation) + ')\'>' +
+                //     '<div class="middle aligned content">' +
+                //     '<div class="math-lib-header">' + equation.title + '</div>' +
+                //     '<div class="meta math-lib-meta" id="' + name + index + '">' + equationHtml + '</div>' +
+                //     '</div></div>';
+                eqDataArray.push({
+                    equation: JSON.stringify(equation),
+                    title: equation.title,
+                    id: name+index,
+                    equationHtml: equationHtml
+                })
             }
-            this.libEquation = eqData;
+            this.libEquation = eqDataArray;
+            //console.log(this.libEquation)
         },
 
         generateSymbolView(equations, name) {
@@ -263,35 +315,36 @@ export default {
             });
         },
 
-        // latexToEquations(object) {
-        //     if (advanceField === true || advanceField === 'true') {
-        //         if (object.latexCmd) {
-        //             insertTextAtCursor(object.latexValue);
-        //         } else if (object.latex) {
-        //             insertTextAtCursor(object.latex);
-        //         } else {
-        //             insertTextAtCursor(object.latexText);
-        //         }
-        //     } else {
-        //         if (object.latexCmd) {
-        //             mathField.cmd(object.latexCmd);
-        //         } else if (object.latex) {
-        //             mathField.write(object.latex);
-        //         } else {
-        //             insertTextAtCursor(object.latexText);
-        //         }
-        //     }
-        // },
+        latexToEquations(object) {
+            object = JSON.parse(object)
+            if (this.advanceField === true || this.advanceField === 'true') {
+                if (object.latexCmd) {
+                    this.insertTextAtCursor(object.latexValue);
+                } else if (object.latex) {
+                    this.insertTextAtCursor(object.latex);
+                } else {
+                    this.insertTextAtCursor(object.latexText);
+                }
+            } else {
+                if (object.latexCmd) {
+                    mathField.cmd(object.latexCmd);
+                } else if (object.latex) {
+                    mathField.write(object.latex);
+                } else {
+                    this.insertTextAtCursor(object.latexText);
+                }
+            }
+        },
 
-        // insertTextAtCursor(text) {
-        //     const input = document.getElementById('advInput')
-        //     input.setRangeText(
-        //         text,
-        //         input.selectionStart,
-        //         input.selectionEnd,
-        //         'end'
-        //     )
-        // }
+        insertTextAtCursor(text) {
+            const input = document.getElementById('advInput')
+            input.setRangeText(
+                text,
+                input.selectionStart,
+                input.selectionEnd,
+                'end'
+            )
+        }
     },
     
 
@@ -312,6 +365,9 @@ export default {
     vertical-align: middle;
     color: #fff;
     border-color: #615c5c;
+}
+.modal-dialog-scrollable .modal-body {
+    overflow-y: hidden;
 }
 /* Tab header */
 
