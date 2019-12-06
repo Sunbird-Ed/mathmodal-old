@@ -43,20 +43,48 @@
 
                         <div class="ui grid symbolGroup" id="symbolGreek" v-show="symbolSelected == 'all' || symbolSelected == 'greek' ">
                             <div>Greek and Hebrew letters</div>
-                            <ul v-html="this.symbol.Greek"></ul>
+                            <ul>
+                                <li class=" math-symbols" v-for="item in this.symbol.Greek" :key="item.id">
+                                    <span class="symbol-div">
+                                        <div class="math-symbol" :class="item.class" :id="item.id" @click=latexToEquations(item.symbol) v-html="item.symbolHtml"></div>
+                                        <span class="symbol-latex">{{item.symbol.latex}}</span>
+                                    </span> 
+                                </li>
+                            </ul>
                         </div>
 
                         <div class="ui grid symbolGroup" id="symbolBinary" v-show="symbolSelected == 'all' || symbolSelected == 'binary' ">
                             <div class="sixteen wide column">Binary Operation/Relation Symbols</div>
-                            <ul v-html="this.symbol.Binary"></ul>
+                            <ul>
+                                <li class=" math-symbols" v-for="item in this.symbol.Binary" :key="item.id">
+                                    <span class="symbol-div">
+                                        <div class="math-symbol" :class="item.class" :id="item.id" @click=latexToEquations(item.symbol) v-html="item.symbolHtml"></div>
+                                        <span class="symbol-latex">{{item.symbol.latex}}</span>
+                                    </span> 
+                                </li>
+                            </ul>
                         </div>
                         <div class="ui grid symbolGroup" id="symbolArrow" v-show="symbolSelected == 'all' || symbolSelected == 'arrow' ">
                             <div class="sixteen wide column">Arrows</div>
-                            <ul v-html="this.symbol.Arrow"></ul>
+                            <ul>
+                                <li class=" math-symbols" v-for="item in this.symbol.Arrow" :key="item.id">
+                                    <span class="symbol-div">
+                                        <div class="math-symbol" :class="item.class" :id="item.id" @click=latexToEquations(item.symbol) v-html="item.symbolHtml"></div>
+                                        <span class="symbol-latex">{{item.symbol.latex}}</span>
+                                    </span> 
+                                </li>
+                            </ul>
                         </div>
                         <div class="ui grid symbolGroup" id="symbolMisc" v-show="symbolSelected == 'all' || symbolSelected == 'misc' ">
                             <div class="sixteen wide column">Miscellaneous</div>
-                            <ul v-html="this.symbol.Misc"></ul>
+                            <ul>
+                                <li class=" math-symbols" v-for="item in this.symbol.Misc" :key="item.id">
+                                    <span class="symbol-div">
+                                        <div class="math-symbol" :class="item.class" :id="item.id" @click=latexToEquations(item.symbol) v-html="item.symbolHtml"></div>
+                                        <span class="symbol-latex">{{item.symbol.latex}}</span>
+                                    </span> 
+                                </li>
+                            </ul>
                         </div>
                     </b-tab>
 
@@ -73,23 +101,58 @@
 
                         <div class="ui grid equationGroup" id="equationTrig"  v-show="equSelected == 'all' || equSelected == 'trig' ">
                             <div class="sixteen wide column">Trigonometric functions</div>
-                            <ul v-html="this.equation.Trig"></ul>
+                            <ul>
+                                <li class=" math-symbols" v-for="item in this.equation.Trig" :key="item.id">
+                                    <span class="symbol-div">
+                                        <div class="math-symbol" :class="item.class" :id="item.id" @click=latexToEquations(item.symbol) v-html="item.symbolHtml"></div>
+                                        <span class="symbol-latex">{{item.symbol.latex}}</span>
+                                    </span> 
+                                </li>
+                            </ul>
                         </div>
                         <div class="ui grid equationGroup" id="equationSupsub" v-show="equSelected == 'all' || equSelected == 'supsub' ">
                             <div class="sixteen wide column">Superscripts and subscripts</div>
-                            <ul v-html="this.equation.Supsub"></ul>
+                            <ul>
+                                <li class=" math-symbols" v-for="item in this.equation.Supsub" :key="item.id">
+                                    <span class="symbol-div">
+                                        <div class="math-symbol" :class="item.class" :id="item.id" @click=latexToEquations(item.symbol) v-html="item.symbolHtml"></div>
+                                        <span class="symbol-latex">{{item.symbol.latex}}</span>
+                                    </span> 
+                                </li>
+                            </ul>
                         </div>
                         <div class="ui grid equationGroup" id="equationRoot" v-show="equSelected == 'all' ">
                             <div class="sixteen wide column">Roots</div>
-                            <ul v-html="this.equation.Root"></ul>
+                            <ul>
+                                <li class=" math-symbols" v-for="item in this.equation.Root" :key="item.id">
+                                    <span class="symbol-div">
+                                        <div class="math-symbol" :class="item.class" :id="item.id" @click=latexToEquations(item.symbol) v-html="item.symbolHtml"></div>
+                                        <span class="symbol-latex">{{item.symbol.latex}}</span>
+                                    </span> 
+                                </li>
+                            </ul>
                         </div>
                         <div class="ui grid equationGroup" id="equationFrac" v-show="equSelected == 'all' || equSelected == 'frac' ">
                             <div class="sixteen wide column">Fractions</div>
-                            <ul v-html="this.equation.Frac"></ul>
+                            <ul>
+                                <li class=" math-symbols" v-for="item in this.equation.Frac" :key="item.id">
+                                    <span class="symbol-div">
+                                        <div class="math-symbol" :class="item.class" :id="item.id" @click=latexToEquations(item.symbol) v-html="item.symbolHtml"></div>
+                                        <span class="symbol-latex">{{item.symbol.latex}}</span>
+                                    </span> 
+                                </li>
+                            </ul>
                         </div>
                         <div class="ui grid equationGroup" id="equationMisc" v-show="equSelected == 'all' || equSelected == 'misc' ">
                             <div class="sixteen wide column">Miscellaneous</div>
-                            <ul v-html="this.equation.Misc"></ul>
+                            <ul>
+                                <li class=" math-symbols" v-for="item in this.equation.Misc" :key="item.id">
+                                    <span class="symbol-div">
+                                        <div class="math-symbol" :class="item.class" :id="item.id" @click=latexToEquations(item.symbol) v-html="item.symbolHtml"></div>
+                                        <span class="symbol-latex">{{item.symbol.latex}}</span>
+                                    </span> 
+                                </li>
+                            </ul>
                         </div>
                     </b-tab>
 
@@ -98,31 +161,48 @@
                             <a href="https://katex.org/docs/supported.html" target="_blank"><i class="info circle icon"></i>
                             </a>
                         </div>
-                        <ul v-html="this.advancedSymbols"></ul>
+                        <ul>
+                            <li class="math-symbols" v-for="item in this.advancedSymbols" :key="item.id">
+                                <span class="advanc-symbol-div">
+                                    <div class="math-symbol" :id="item.id" @click=latexToEquations(item.equation)>
+                                        <img :src="item.imgsrc">
+                                    </div> 
+                                </span>
+                            </li>
+                        </ul>
                     </b-tab>
-
                 </b-tabs>
             </b-card>
             
 
             <slot modal-footer>
                 <div class="actions math-footer">
-                    <small id="text_hint" style="">Please switch to advanced tab to copy paste LaTeX</small>
+                    <small id="text_hint" v-show="text_hint">Please switch to advanced tab to copy paste LaTeX</small>
                     <b-row>
-                        <b-col cols="9"  id="advanceFieldMath" style="display: none;">
+                        <b-col cols="9"  id="advanceFieldMath" v-show="!advanceField">
                             <span id="math-field"></span>
                             <span id="latex"></span>
                         </b-col>
-                        <b-col cols="9" id="advanceFieldInput">
+                        <b-col cols="9" id="advanceFieldInput" v-show="advanceField">
                             <input id="advInput" type="textarea" class="latex-field">
                         </b-col>
                         <b-col cols="3">
-                            <b-button block variant="outline-primary" class="math-add-button" onclick="loadImagetoCKEditor()" type="button">Add
+                            <b-button block variant="outline-primary" class="math-add-button" @click="loadImagetoCKEditor()" type="button">Add
                             </b-button>
                         </b-col>
                     </b-row>
                 </div>
             </slot>
+
+            <div class="statusIndicator" v-show="statusIndication.show">
+                <div class="text-center mb-12">
+                    <b-spinner variant="primary" v-show="isProcessing"></b-spinner>
+                    <div class="statusMsg" :class="statusIndication.textClass">
+                        <span></span> {{statusIndication.statusMsg}}
+                    </div>
+                </div>
+            </div>
+            <div class="eventBlocker" v-show="isProcessing"></div>
         </b-modal>
     </div>
 </template>
@@ -155,7 +235,16 @@ export default {
             },
             advancedSymbols: "",
             advanceField: false,
-            valid: false
+            valid: false,
+            text_hint: true,
+            activeTab: '',
+            statusIndication: {
+                statusMsg: 'Converting to image',
+                textClass: 'text-dark',
+                show: false
+            },
+            isProcessing: false
+            
         }
     },
     mounted () {
@@ -189,19 +278,19 @@ export default {
             });
             window.mathField = mathField;
             $(mathFieldSpan).keydown(function(e) {
-                if (e.keyCode == 86 || e.keycode == 13) { //keycode value for "v"
-                    setTimeout(function() {
-                        if (!valid) { // checks if the pasted value is not valid
-                            // ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                            //   title: 'Incorrect formula entered.',
-                            //   position: 'topCenter',
-                            // });
-                            alert("Incorrect formula entered.");
-                        }
-                        valid = false;
-                    }, 1);
-                }
-            });
+            if (e.keyCode == 86 || e.keycode == 13) { //keycode value for "v"
+                setTimeout(function() {
+                    if (!valid) { // checks if the pasted value is not valid
+                        // ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        //   title: 'Incorrect formula entered.',
+                        //   position: 'topCenter',
+                        // });
+                        alert("Incorrect formula entered.");
+                    }
+                    valid = false;
+                }, 1);
+            }
+        });
         });
 
     },
@@ -219,32 +308,47 @@ export default {
                     MQ.StaticMath(element);
                 }
             }
+
+            if(evt.currentTarget.text == 'Advanced'){
+                this.advanceField = true;
+                this.text_hint = false;
+            }else{
+                this.text_hint = true;
+            }
+            // before tab swiched
+            if(evt.currentTarget.text != 'Advanced' && this.activeTab == 'advanced'){
+                this.advanceField = false;
+                var latexVal = $scope.latexValue;
+                mathField.latex('');
+                mathField.write(latexVal);
+                if(_.isEmpty(mathField.latex())){
+                    $scope.latexValue = latexVal;              
+                    this.advanceField = true;
+                }
+                else{
+                    this.advanceField = false;
+                }
+            }
+            this.activeTab = evt.currentTarget.text;
         },
         
         generateLibraryView(equations, name) {
-            //let eqData = "";
             let eqDataArray = []
             for (var index = 0; index < equations.length; index++) {
                 var equation = equations[index];
                 var equationHtml = this.renderToString(equation.latex);
-                // eqData += '<div class="item select list-items math-lib" @click=\'latexToEquations(' + JSON.stringify(equation) + ')\'>' +
-                //     '<div class="middle aligned content">' +
-                //     '<div class="math-lib-header">' + equation.title + '</div>' +
-                //     '<div class="meta math-lib-meta" id="' + name + index + '">' + equationHtml + '</div>' +
-                //     '</div></div>';
                 eqDataArray.push({
-                    equation: JSON.stringify(equation),
+                    equation: equation,
                     title: equation.title,
                     id: name+index,
                     equationHtml: equationHtml
                 })
             }
             this.libEquation = eqDataArray;
-            //console.log(this.libEquation)
         },
 
         generateSymbolView(equations, name) {
-            var html = '';
+            let symbolDataArray = []
             var symbolHtml, mqClass, symbol = '';
             for (var index = 0; index < equations.length; index++) {
                 symbol = equations[index];
@@ -254,17 +358,19 @@ export default {
                     mqClass = 'mq-render'
                     symbolHtml = symbol.latexDisplay ? symbol.latexDisplay : symbol.latex;
                 }
-                html += '<li class=" math-symbols">' +
-                    '<span class="symbol-div">' +
-                    '<div class="math-symbol ' + mqClass + '" id="' + name + index + '" onclick=\'latexToEquations(' + JSON.stringify(symbol) + ')\' >' + symbolHtml + '</div>' +
-                    '<span class="symbol-latex">' + symbol.latex + '</span>' +
-                    '</span> </li>';
+                symbolDataArray.push({
+                    symbol: symbol,
+                    id: name+index,
+                    symbolHtml: symbolHtml,
+                    latex: symbol.latex,
+                    class: mqClass
+                })
             }
-            this.symbol[name] = html;
+            this.symbol[name] = symbolDataArray;
         },
 
         generateEquationView(equations, name) {
-            var html = '';
+            var equaDataArray = [];
             var symbolHtml, mqClass, symbol = '';
             for (var index = 0; index < equations.length; index++) {
                 symbol = equations[index];
@@ -274,13 +380,15 @@ export default {
                     mqClass = 'mq-render'
                     symbolHtml = symbol.latexDisplay ? symbol.latexDisplay : symbol.latex;
                 }
-                html += '<li class="math-symbols">' +
-                    '<span class="symbol-div">' +
-                    '<div class="math-symbol ' + mqClass + '" id="' + name + index + '" onclick=\'latexToEquations(' + JSON.stringify(symbol) + ')\' >' + symbolHtml + '</div>' +
-                    '<span class="symbol-latex">' + symbol.latex + '</span>' +
-                    '</span> </li>';
+                equaDataArray.push({
+                    symbol: symbol,
+                    id: name+index,
+                    symbolHtml: symbolHtml,
+                    latex: symbol.latex,
+                    class: mqClass
+                })
             }
-            this.equation[name] = html;
+            this.equation[name] = equaDataArray;
         },
 
         generateAdvancedSymbolsView(equations, name) {
@@ -296,17 +404,17 @@ export default {
                 advancedTabImageArray.push(url);
             }); 
             
-            var html = '';
+            var advancedSymbData = [];
             var equation = '';
             for (var index = 0; index < equations.length; index++) {
                 equation = equations[index];
-                html += '<li class="math-symbols"><span class="advanc-symbol-div">' +
-                    '<div class="math-symbol" id="' + name + index + '" onclick=\'latexToEquations(' + JSON.stringify(equation) + ')\'>' +
-                    '<img src="' + advancedTabImageArray[index] + '">' +
-                    '</div> </span>' +
-                    '</div></div></li>';
+                advancedSymbData.push({
+                    equation: equation,
+                    id: name+index,
+                    imgsrc: advancedTabImageArray[index]
+                })   
             }
-            this.advancedSymbols = html;
+            this.advancedSymbols = advancedSymbData;
         },
 
         renderToString (string) {
@@ -316,7 +424,7 @@ export default {
         },
 
         latexToEquations(object) {
-            object = JSON.parse(object)
+            //object = JSON.parse(object)
             if (this.advanceField === true || this.advanceField === 'true') {
                 if (object.latexCmd) {
                     this.insertTextAtCursor(object.latexValue);
@@ -344,6 +452,75 @@ export default {
                 input.selectionEnd,
                 'end'
             )
+        },
+
+        resetStatusIndicator() {
+            this.statusIndication.show = false
+            this.statusIndication.statusMsg = 'Converting to image',
+            this.statusIndication.textClass = 'text-dark'
+        },
+
+        async loadImagetoCKEditor() {
+            let latexText = $("#advInput").val();
+            this.statusIndication.show = true
+            this.isProcessing = true
+            var promiseimgUrl = await this.generateLatexToPng(latexText);
+            console.log(promiseimgUrl);
+            // promiseimgUrl.then(function(imgUrl) {
+            //     let obj = {
+            //         imgURL: imgUrl,
+            //         latexFrmla: latexText,
+            //         advanced: this.advanceField
+            //     }
+            //     this.isProcessing = false;
+            //     this.statusIndication.statusMsg = "Image Converted Successfully"
+            //     this.statusIndication.textClass = 'text-success'
+            //     setTimeout(() => {
+            //         this.statusIndication.show = false
+            //     }, 500);
+            //     console.log(obj)
+            //     $("#advInput").val('')
+            // })
+        },
+
+        async generateLatexToPng(latexText) {
+            let that = this;
+            return new Promise(function(resolve, reject) {
+                var imgUrl = "";
+                $.ajax({
+                    url: 'http://localhost:3001/convert',
+                    type: 'POST',
+                    data: {
+                        latexInput: latexText,
+                        outputFormat: 'PNG',
+                        outputScale: '100%'
+                    },
+                    success: function(data) {
+                        let resultDataJSON = JSON.parse(data)
+                        if (resultDataJSON && !data.error) {
+                            imgUrl = 'http://localhost:3001/' + resultDataJSON.imageURL;
+                            that.isProcessing = false;
+                            that.statusIndication.statusMsg = "Image Converted Successfully"
+                            that.statusIndication.textClass = 'text-success'
+                            setTimeout(() => {
+                                that.resetStatusIndicator()
+                            }, 5000);
+                            resolve(imgUrl);
+                        }
+                    },
+                    error: function(e) {
+                        that.isProcessing = false;
+                        that.statusIndication.statusMsg = "Error while communicating server"
+                        that.statusIndication.textClass = 'text-danger'
+                        setTimeout(() => {
+                            that.resetStatusIndicator()
+                        }, 5000);
+
+                        reject(e);
+                    }
+                });
+            });
+
         }
     },
     
@@ -355,7 +532,7 @@ export default {
 
 .modal-close-btn {
     position: absolute;
-    z-index: 100;
+    z-index: 90;
     right: 10px;
     top: 9px;
     background-color: #615c5c;
@@ -369,8 +546,41 @@ export default {
 .modal-dialog-scrollable .modal-body {
     overflow-y: hidden;
 }
+.statusIndicator {
+    padding: 15px;
+    background-color: #f1f1f1;
+    border-top: 1px solid #eae8e8;
+    position: relative;
+    z-index: 100;
+}
+.statusMsg {
+    vertical-align: middle;
+    display: block;
+    font-size: 14px;
+}
+.eventBlocker {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    background-color: #f1f1f1c7;
+    z-index: 90;
+}
 /* Tab header */
 
+#math-field {
+    max-width: 100%;
+    min-width: 100%;
+    padding: 2px 10px;
+    border-radius: 3px;
+    min-height: 35px;
+}
+#latex {
+    display: none;
+}
+#mathModal .modal-body {
+    padding: 0;
+}
 .modal-body .tab-content {
     height: 280px;
     overflow: auto;
