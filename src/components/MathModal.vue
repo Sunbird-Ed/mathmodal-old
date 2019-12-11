@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <h1>Math Modal</h1>
-        <b-button v-b-modal.mathModal>Equation</b-button>
+    <div class="mathModalRoot">
+        <!-- <h1>Math Modal</h1>
+        <b-button v-b-modal.mathModal>Equation</b-button> -->
 
         <b-modal class="mathModal"  id="mathModal" 
                     title="BootstrapVue"
@@ -11,7 +11,7 @@
                     ref="mathModal" >
 
             <slot modal-header>
-                <b-button class="modal-close-btn" size="sm" @click="closeModal()">x</b-button>
+                <b-button class="modal-close-btn close" size="sm" @click="closeModal()"><span aria-hidden="true">&times;</span></b-button>
             </slot>
             
             <b-card no-body>
@@ -211,8 +211,28 @@
 <script>
 import katex from 'katex';
 import json from '../latexEquations.json'   
+import EventBus from '../eventBus';
+
 var MQ;
 var mathField, latexSpan;
+
+var mathtext_plugin = function() {
+    this.callbackFn = undefined;
+}
+window.mathModal = {ckeditor: {}};
+mathtext_plugin.prototype.init = function(obj) {
+    EventBus.$emit('loadDataFromCkEditortoPopup', obj)
+},
+
+mathtext_plugin.prototype.modal = function(data) {
+    this.init(data.detail);
+    this.callbackFn = data.onInit;
+    console.log(this);
+},
+
+window.mathModal.ckeditor.mathtext = new mathtext_plugin()
+mathtext_plugin = undefined
+
 export default {
     name: 'MathModal',
     data() {
@@ -278,24 +298,43 @@ export default {
             });
             window.mathField = mathField;
             $(mathFieldSpan).keydown(function(e) {
-            if (e.keyCode == 86 || e.keycode == 13) { //keycode value for "v"
-                setTimeout(function() {
-                    if (!valid) { // checks if the pasted value is not valid
-                        // ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                        //   title: 'Incorrect formula entered.',
-                        //   position: 'topCenter',
-                        // });
-                        alert("Incorrect formula entered.");
-                    }
-                    valid = false;
-                }, 1);
-            }
-        });
+                if (e.keyCode == 86 || e.keycode == 13) { //keycode value for "v"
+                    setTimeout(function() {
+                        if (!valid) { // checks if the pasted value is not valid
+                            // ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            //   title: 'Incorrect formula entered.',
+                            //   position: 'topCenter',
+                            // });
+                            alert("Incorrect formula entered.");
+                        }
+                        valid = false;
+                    }, 1);
+                }
+            });
         });
 
     },
-
+    created () {
+        const that = this
+        EventBus.$on('loadDataFromCkEditortoPopup', function(params) {
+            that.loadDataFromCkEditortoPopup(params);
+        });
+    },
     methods: {
+        
+        async loadDataFromCkEditortoPopup(data = '') {
+            this.openModel();
+            this.$root.$on('bv::modal::shown', () => { 
+                if(!data || data == '') return;
+                this.advanceField = (data.advanced == 'false') ? false : true;
+                this.latexToEquations({ 'latex': data.latex })
+            })
+        },
+
+        async openModel() {
+            this.$refs['mathModal'].show();
+        },
+
         closeModal() {
             this.$refs['mathModal'].hide()
         },
@@ -466,21 +505,15 @@ export default {
             this.isProcessing = true
             var promiseimgUrl = await this.generateLatexToPng(latexText);
             console.log(promiseimgUrl);
-            // promiseimgUrl.then(function(imgUrl) {
-            //     let obj = {
-            //         imgURL: imgUrl,
-            //         latexFrmla: latexText,
-            //         advanced: this.advanceField
-            //     }
-            //     this.isProcessing = false;
-            //     this.statusIndication.statusMsg = "Image Converted Successfully"
-            //     this.statusIndication.textClass = 'text-success'
-            //     setTimeout(() => {
-            //         this.statusIndication.show = false
-            //     }, 500);
-            //     console.log(obj)
-            //     $("#advInput").val('')
-            // })
+
+            let obj = {
+                imgURL: promiseimgUrl,
+                latexFrmla: latexText,
+                advanced: this.advanceField
+            }
+            window.mathModal.ckeditor.mathtext.callbackFn(obj);
+            $("#advInput").val('');
+            this.closeModal();
         },
 
         async generateLatexToPng(latexText) {
@@ -522,9 +555,7 @@ export default {
             });
 
         }
-    },
-    
-
+    }
 }
 </script>
 
@@ -535,13 +566,17 @@ export default {
     z-index: 90;
     right: 10px;
     top: 9px;
-    background-color: #615c5c;
+    background-color: transparent;
     border-radius: 50%;
     padding: 0px 7px;
     line-height: 20px;
     vertical-align: middle;
-    color: #fff;
-    border-color: #615c5c;
+    color: #3e3e3e;
+    border-color: transparent;
+}
+.modal-close-btn:hover {
+    background-color: transparent;
+    border-color: transparent;
 }
 .modal-dialog-scrollable .modal-body {
     overflow-y: hidden;
@@ -554,7 +589,6 @@ export default {
     z-index: 100;
 }
 .statusMsg {
-    vertical-align: middle;
     display: block;
     font-size: 14px;
 }
@@ -581,7 +615,7 @@ export default {
 #mathModal .modal-body {
     padding: 0;
 }
-.modal-body .tab-content {
+#mathModal .modal-body .tab-content {
     height: 280px;
     overflow: auto;
 }

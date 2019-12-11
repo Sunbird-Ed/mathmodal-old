@@ -10,6 +10,9 @@ npm install
 npm run serve
 ```
 
+### Run below command in browser console to show popup
+window.mathModal.ckeditor.mathtext['modal']('');
+
 ### Compiles and minifies for production
 ```
 npm run build
