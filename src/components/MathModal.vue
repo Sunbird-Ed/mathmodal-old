@@ -8,7 +8,8 @@
                     :scrollable=true
                     :hide-footer=true
                     :hide-header=true
-                    ref="mathModal" >
+                    ref="mathModal" 
+                    @shown="handleModalInitialization()">
 
             <slot modal-header>
                 <b-button class="modal-close-btn close" size="sm" @click="closeModal()"><span aria-hidden="true">&times;</span></b-button>
@@ -212,6 +213,7 @@
 import katex from 'katex';
 import json from '../latexEquations.json'   
 import EventBus from '../eventBus';
+import { BModal, BTabs, BTab, BCard, BButton, BSpinner, BRow, BCol, BFormSelect } from 'bootstrap-vue'
 
 var MQ;
 var mathField, latexSpan;
@@ -263,9 +265,21 @@ export default {
                 textClass: 'text-dark',
                 show: false
             },
-            isProcessing: false
+            isProcessing: false,
+            ckTomdlData: ''
             
         }
+    },
+    components: {
+        BModal,
+        BTabs,
+        BTab,
+        BButton,
+        BCard,
+        BSpinner,
+        BRow,
+        BCol,
+        BFormSelect
     },
     mounted () {
         MQ = MathQuill.getInterface(2);
@@ -282,61 +296,69 @@ export default {
         this.generateEquationView(json.equations.misc, 'Misc');
         this.generateAdvancedSymbolsView(json.advancedSymbols, 'advancedSymbols');
         
-        this.$root.$on('bv::modal::shown', () => {
-            var mathFieldSpan = document.getElementById('math-field');
-            latexSpan = document.getElementById('latex');
-            //hiddenSpanArea = document.getElementById('hiddenSpan');
-            mathField = MQ.MathField(mathFieldSpan, {
-                spaceBehavesLikeTab: true,
-                handlers: {
-                    edit: function() {
-                        latexSpan.textContent = mathField.latex();
-                        $('#advInput').val(latexSpan.textContent);
-                        this.valid = true;
-                    }
-                }
-            });
-            window.mathField = mathField;
-            $(mathFieldSpan).keydown(function(e) {
-                if (e.keyCode == 86 || e.keycode == 13) { //keycode value for "v"
-                    setTimeout(function() {
-                        if (!valid) { // checks if the pasted value is not valid
-                            // ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                            //   title: 'Incorrect formula entered.',
-                            //   position: 'topCenter',
-                            // });
-                            alert("Incorrect formula entered.");
-                        }
-                        valid = false;
-                    }, 1);
-                }
-            });
-        });
-
-    },
-    created () {
         const that = this
         EventBus.$on('loadDataFromCkEditortoPopup', function(params) {
-            that.loadDataFromCkEditortoPopup(params);
+           that.loadDataFromCkEditortoPopup(params);
         });
     },
     methods: {
         
-        async loadDataFromCkEditortoPopup(data = '') {
+        loadDataFromCkEditortoPopup(data = '') {
+            this.ckTomdlData = data
             this.openModel();
-            this.$root.$on('bv::modal::shown', () => { 
-                if(!data || data == '') return;
-                this.advanceField = (data.advanced == 'false') ? false : true;
-                this.latexToEquations({ 'latex': data.latex })
-            })
         },
 
-        async openModel() {
+        openModel() {
             this.$refs['mathModal'].show();
         },
 
+        handleModalInitialization() {
+            const equationinfo = this.ckTomdlData
+            var mathFieldSpan = document.getElementById('math-field');
+                latexSpan = document.getElementById('latex');
+                mathField = MQ.MathField(mathFieldSpan, {
+                    spaceBehavesLikeTab: true,
+                    handlers: {
+                        edit: function() {
+                            if(mathField) {
+                                latexSpan.textContent = mathField.latex();
+                                $('#advInput').val(latexSpan.textContent);
+                                this.valid = true;
+                            }
+                        }
+                    }
+                });
+                $("#advInput").val('');
+                mathField.latex('');
+                window.mathField = mathField;
+                $(mathFieldSpan).keydown(function(e) {
+                    if (e.keyCode == 86 || e.keycode == 13) { //keycode value for "v"
+                        setTimeout(function() {
+                            if (!valid) { // checks if the pasted value is not valid
+                                // ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                                //   title: 'Incorrect formula entered.',
+                                //   position: 'topCenter',
+                                // });
+                                alert("Incorrect formula entered.");
+                            }
+                            valid = false;
+                        }, 1);
+                    }
+                });
+
+                if(!equationinfo || equationinfo == '') return;
+                this.advanceField = (equationinfo.advanced == 'false') ? false : true;
+                this.latexToEquations({ 'latex': equationinfo.latex })
+        },
+
         closeModal() {
+            $("#advInput").val('');
             this.$refs['mathModal'].hide()
+            this.advanceField = false
+            this.valid = false
+            this.text_hint = true
+            this.activeTab = ''
+            this.resetStatusIndicator()
         },
 
         changeTab(evt) {
@@ -357,11 +379,11 @@ export default {
             // before tab swiched
             if(evt.currentTarget.text != 'Advanced' && this.activeTab == 'advanced'){
                 this.advanceField = false;
-                var latexVal = $scope.latexValue;
+                var latexVal = $('#advInput').val();
                 mathField.latex('');
                 mathField.write(latexVal);
                 if(_.isEmpty(mathField.latex())){
-                    $scope.latexValue = latexVal;              
+                    $('#advInput').val(latexVal)            
                     this.advanceField = true;
                 }
                 else{
@@ -512,7 +534,6 @@ export default {
                 advanced: this.advanceField
             }
             window.mathModal.ckeditor.mathtext.callbackFn(obj);
-            $("#advInput").val('');
             this.closeModal();
         },
 
@@ -678,6 +699,35 @@ li.math-symbols {
 li.math-symbols span.symbol-latex {
     display: none;
 }
+
+.math-symbols {
+text-align: center;
+}
+
+.math-symbol {
+padding: 5px 10px;
+cursor: pointer;
+}
+
+.math-latex-symbols {
+padding: 0 10px 0 0;
+font-weight: 800;
+}
+
+
+
+.meta .katex-html {
+text-align: left;
+font-weight: 600;
+color: rgba(0, 0, 0, .87);
+}
+
+
+#math-field .mq-root-block{
+padding: 0;
+font-size: 1.8em;
+}
+ 
 
 /* Footer */
 .actions.math-footer {
