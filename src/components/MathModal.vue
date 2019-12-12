@@ -210,7 +210,6 @@
 
 
 <script>
-import katex from 'katex';
 import json from '../latexEquations.json'   
 import EventBus from '../eventBus';
 import { BModal, BTabs, BTab, BCard, BButton, BSpinner, BRow, BCol, BFormSelect } from 'bootstrap-vue'
@@ -377,12 +376,12 @@ export default {
                 this.text_hint = true;
             }
             // before tab swiched
-            if(evt.currentTarget.text != 'Advanced' && this.activeTab == 'advanced'){
+            if(evt.currentTarget.text != 'Advanced' && this.activeTab == 'Advanced'){
                 this.advanceField = false;
                 var latexVal = $('#advInput').val();
                 mathField.latex('');
                 mathField.write(latexVal);
-                if(_.isEmpty(mathField.latex())){
+                if(mathField.latex() == ''){
                     $('#advInput').val(latexVal)            
                     this.advanceField = true;
                 }
