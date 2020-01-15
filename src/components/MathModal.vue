@@ -334,10 +334,6 @@ export default {
                     if (e.keyCode == 86 || e.keycode == 13) { //keycode value for "v"
                         setTimeout(function() {
                             if (!valid) { // checks if the pasted value is not valid
-                                // ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                                //   title: 'Incorrect formula entered.',
-                                //   position: 'topCenter',
-                                // });
                                 alert("Incorrect formula entered.");
                             }
                             valid = false;
@@ -521,19 +517,21 @@ export default {
         },
 
         async loadImagetoCKEditor() {
+            const that = this;
             let latexText = $("#advInput").val();
             this.statusIndication.show = true
             this.isProcessing = true
             var promiseimgUrl = await this.generateLatexToPng(latexText);
-            console.log(promiseimgUrl);
-
-            let obj = {
-                imgURL: promiseimgUrl,
-                latexFrmla: latexText,
-                advanced: this.advanceField
-            }
-            window.mathModal.ckeditor.mathtext.callbackFn(obj);
-            this.closeModal();
+            this.convertImgToBase64(promiseimgUrl, (base64Url) => {
+                console.log(base64Url);
+                let obj = {
+                    imgURL: base64Url,
+                    latexFrmla: latexText,
+                    advanced: that.advanceField
+                }
+                window.mathModal.ckeditor.mathtext.callbackFn(obj);
+                that.closeModal();
+            });
         },
 
         async generateLatexToPng(latexText) {
@@ -574,12 +572,27 @@ export default {
                 });
             });
 
+        },
+
+        async convertImgToBase64(imgPath, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                var reader = new FileReader();
+                reader.onloadend = function() {
+                    callback(reader.result);
+                }   
+                reader.readAsDataURL(xhr.response);
+            };
+            xhr.open('GET', imgPath);
+            xhr.responseType = 'blob';
+            xhr.send();
         }
     }
 }
 </script>
 
-<style>
+<style scoped="css">
+@import '../app.css';
 
 .modal-close-btn {
     position: absolute;

@@ -1,4 +1,4 @@
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 module.exports = {
   publicPath: '.',
   configureWebpack: {
@@ -6,6 +6,6 @@ module.exports = {
     optimization: {
       splitChunks: false
     },
-    plugins: [new BundleAnalyzerPlugin()]
+    //plugins: [new BundleAnalyzerPlugin()]
   }
 }
