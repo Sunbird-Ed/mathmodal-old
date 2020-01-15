@@ -14,7 +14,7 @@
 @import "mixins";
 @import "root";
 @import "reboot";
-@import "type";
+@import "type";  
 @import "images";
 @import "code";
 @import "grid";
@@ -25,7 +25,7 @@
 @import "buttons";
 
 // *** Components
-// @import "transitions";
+ @import "transitions";
 // @import "dropdown";
 // @import "button-group";
 // @import "input-group";
@@ -61,7 +61,7 @@
 // @import "utilities/position";
 // @import "utilities/screenreaders";
 // @import "utilities/spacing";
-// @import "utilities/text";
+//  @import "utilities/text";
 // @import "utilities/visibility";
 
 // *** Print classes
