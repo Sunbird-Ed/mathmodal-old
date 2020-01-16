@@ -3,7 +3,8 @@
         <!-- <h1>Math Modal</h1>
         <b-button v-b-modal.mathModal>Equation</b-button> -->
 
-        <b-modal class="mathModal"  id="mathModal" 
+        <b-modal class="mathModal"  id="mathModal"
+                    hide-backdrop
                     title="BootstrapVue"
                     :scrollable=true
                     :hide-footer=true
@@ -175,7 +176,6 @@
                 </b-tabs>
             </b-card>
             
-
             <slot modal-footer>
                 <div class="actions math-footer">
                     <small id="text_hint" v-show="text_hint">Please switch to advanced tab to copy paste LaTeX</small>
@@ -238,6 +238,10 @@ export default {
     name: 'MathModal',
     data() {
         return {
+            modalClass: {
+                'mainModal': ['myModalClass'],
+                'modal-body': ['modal-body-custom']
+            },
             libEquation: "",
             equSelected: 'all',
             symbolSelected: 'all',
@@ -354,6 +358,7 @@ export default {
             this.text_hint = true
             this.activeTab = ''
             this.resetStatusIndicator()
+            window.frames.window.frameElement.remove()
         },
 
         changeTab(evt) {
@@ -592,7 +597,7 @@ export default {
 </script>
 
 <style scoped="css">
-@import '../app.css';
+@import '../../custom_bootstrap/public/app.css';
 
 .modal-close-btn {
     position: absolute;
@@ -644,13 +649,6 @@ export default {
 }
 #latex {
     display: none;
-}
-#mathModal .modal-body {
-    padding: 0;
-}
-#mathModal .modal-body .tab-content {
-    height: 280px;
-    overflow: auto;
 }
 .items > .item {
     display: -webkit-box;
@@ -726,8 +724,6 @@ padding: 0 10px 0 0;
 font-weight: 800;
 }
 
-
-
 .meta .katex-html {
 text-align: left;
 font-weight: 600;
@@ -755,5 +751,25 @@ font-size: 1.8em;
     border-radius: 3px;
     min-height: 35px;
     border: 1px solid rgb(128, 128, 128);
+}
+</style>
+
+<style>
+.modal-dialog {
+    margin: 0px;
+}
+.modal-content {
+    border: none;
+    border-radius: 0px;
+}
+.modal-body {
+    padding: 0 !important;
+}
+.tab-content {
+    height: 300px !important;
+    overflow: auto;
+}
+.modal-dialog-scrollable .modal-body {
+    overflow-y: hidden;
 }
 </style>
