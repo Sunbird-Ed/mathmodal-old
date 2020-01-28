@@ -1,5 +1,11 @@
 # mathmodal
 
+Create custom bootstrap by running 
+```
+npm install
+npm run build
+```
+
 ## Project setup
 ```
 npm install
