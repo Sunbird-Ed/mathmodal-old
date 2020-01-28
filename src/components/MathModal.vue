@@ -9,7 +9,10 @@
                     :scrollable=true
                     :hide-footer=true
                     :hide-header=true
+                    :no-close-on-backdrop=true
+                    :no-close-on-esc=true
                     ref="mathModal" 
+                    :no-fade=true
                     @shown="handleModalInitialization()">
 
             <slot modal-header>
@@ -18,7 +21,7 @@
             
             <b-card no-body>
                 <b-tabs content-class="mt-3" justified small card   >
-                    <b-tab title="Library" active  @click=changeTab>
+                    <b-tab title="Library" active @click=changeTab>
                         <div class="item select list-items math-lib" 
                             @click=latexToEquations(item.equation)
                             v-for="item in this.libEquation" :key="item.id"
@@ -228,11 +231,11 @@ mathtext_plugin.prototype.init = function(obj) {
 mathtext_plugin.prototype.modal = function(data) {
     this.init(data.detail);
     this.callbackFn = data.onInit;
-    console.log(this);
 },
 
 window.mathModal.ckeditor.mathtext = new mathtext_plugin()
 mathtext_plugin = undefined
+const hostURL = window.origin || 'http://localhost:3000'
 
 export default {
     name: 'MathModal',
@@ -270,7 +273,6 @@ export default {
             },
             isProcessing: false,
             ckTomdlData: ''
-            
         }
     },
     components: {
@@ -287,16 +289,16 @@ export default {
     mounted () {
         MQ = MathQuill.getInterface(2);
         
-        this.generateLibraryView(json.libraryEquations, 'libFormula');
-        this.generateSymbolView(json.symbols.greek, 'Greek');
-        this.generateSymbolView(json.symbols.binary, 'Binary');
-        this.generateSymbolView(json.symbols.arrow, 'Arrow');
-        this.generateSymbolView(json.symbols.misc, 'Misc');
         this.generateEquationView(json.equations.trig, 'Trig');
         this.generateEquationView(json.equations.supsub, 'Supsub');
         this.generateEquationView(json.equations.root, 'Root');
         this.generateEquationView(json.equations.frac, 'Frac');
         this.generateEquationView(json.equations.misc, 'Misc');
+        this.generateLibraryView(json.libraryEquations, 'libFormula');
+        this.generateSymbolView(json.symbols.greek, 'Greek');
+        this.generateSymbolView(json.symbols.binary, 'Binary');
+        this.generateSymbolView(json.symbols.arrow, 'Arrow');
+        this.generateSymbolView(json.symbols.misc, 'Misc');
         this.generateAdvancedSymbolsView(json.advancedSymbols, 'advancedSymbols');
         
         const that = this
@@ -309,6 +311,10 @@ export default {
         loadDataFromCkEditortoPopup(data = '') {
             this.ckTomdlData = data
             this.openModel();
+        },
+        
+        isDisabled() {
+            return ($("#advInput").val() === '') ? true : false; 
         },
 
         openModel() {
@@ -357,8 +363,9 @@ export default {
             this.valid = false
             this.text_hint = true
             this.activeTab = ''
-            this.resetStatusIndicator()
+            window.frames.frameElement.nextSibling.remove()
             window.frames.window.frameElement.remove()
+            this.resetStatusIndicator()
         },
 
         changeTab(evt) {
@@ -435,12 +442,7 @@ export default {
             var symbolHtml, mqClass, symbol = '';
             for (var index = 0; index < equations.length; index++) {
                 symbol = equations[index];
-                if (name == 'Root') {
-                    symbolHtml = this.renderToString(symbol.latexDisplay ? symbol.latexDisplay : symbol.latex);
-                } else {
-                    mqClass = 'mq-render'
-                    symbolHtml = symbol.latexDisplay ? symbol.latexDisplay : symbol.latex;
-                }
+                symbolHtml = this.renderToString(symbol.latexDisplay ? symbol.latexDisplay : symbol.latex);
                 equaDataArray.push({
                     symbol: symbol,
                     id: name+index,
@@ -460,7 +462,6 @@ export default {
                     url = value.customImage;
                 } else {
                     url = "https://latex.codecogs.com/gif.latex?" + encodeURIComponent(value.latexText);
-                    console.log(url);
                 }
                 advancedTabImageArray.push(url);
             }); 
@@ -524,37 +525,37 @@ export default {
         async loadImagetoCKEditor() {
             const that = this;
             let latexText = $("#advInput").val();
-            this.statusIndication.show = true
-            this.isProcessing = true
-            var promiseimgUrl = await this.generateLatexToPng(latexText);
-            this.convertImgToBase64(promiseimgUrl, (base64Url) => {
-                console.log(base64Url);
+            if(latexText !== '') {
+                this.statusIndication.show = true
+                this.isProcessing = true
+                var promiseimgUrl = await this.generateLatexToPng(latexText);
                 let obj = {
-                    imgURL: base64Url,
+                    imgURL: promiseimgUrl,
                     latexFrmla: latexText,
                     advanced: that.advanceField
                 }
                 window.mathModal.ckeditor.mathtext.callbackFn(obj);
                 that.closeModal();
-            });
+            }
         },
 
         async generateLatexToPng(latexText) {
             let that = this;
             return new Promise(function(resolve, reject) {
                 var imgUrl = "";
+                let url = `${hostURL}/latex/convert`;
                 $.ajax({
-                    url: 'http://localhost:3001/convert',
+                    url: url,
                     type: 'POST',
-                    data: {
-                        latexInput: latexText,
-                        outputFormat: 'PNG',
-                        outputScale: '100%'
+                    data: JSON.stringify({ 'equation': latexText+'.png' }),
+                    async: false,
+                    headers: {
+                        'Content-Type': 'application/json'
                     },
                     success: function(data) {
-                        let resultDataJSON = JSON.parse(data)
+                        let resultDataJSON = data
                         if (resultDataJSON && !data.error) {
-                            imgUrl = 'http://localhost:3001/' + resultDataJSON.imageURL;
+                            imgUrl = resultDataJSON.data;
                             that.isProcessing = false;
                             that.statusIndication.statusMsg = "Image Converted Successfully"
                             that.statusIndication.textClass = 'text-success'
@@ -574,23 +575,9 @@ export default {
 
                         reject(e);
                     }
+                    });
                 });
-            });
 
-        },
-
-        async convertImgToBase64(imgPath, callback) {
-            var xhr = new XMLHttpRequest();
-            xhr.onload = function() {
-                var reader = new FileReader();
-                reader.onloadend = function() {
-                    callback(reader.result);
-                }   
-                reader.readAsDataURL(xhr.response);
-            };
-            xhr.open('GET', imgPath);
-            xhr.responseType = 'blob';
-            xhr.send();
         }
     }
 }
@@ -612,9 +599,11 @@ export default {
     color: #3e3e3e;
     border-color: transparent;
 }
-.modal-close-btn:hover {
+.modal-close-btn:hover,
+.modal-close-btn:focus {
     background-color: transparent;
     border-color: transparent;
+    box-shadow: none
 }
 .modal-dialog-scrollable .modal-body {
     overflow-y: hidden;
@@ -645,7 +634,7 @@ export default {
     min-width: 100%;
     padding: 2px 10px;
     border-radius: 3px;
-    min-height: 35px;
+    min-height: 40px;
 }
 #latex {
     display: none;

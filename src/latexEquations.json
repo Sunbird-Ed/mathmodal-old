@@ -321,7 +321,8 @@
         ]
     },
     "equations": {
-        "trig": [{
+        "trig": [
+            {
                 "latex": "\\sin\\theta"
             },
             {
@@ -381,7 +382,8 @@
                 "latex": "\\oint"
             }
         ],
-        "supsub": [{
+        "supsub": [
+            {
                 "latex": "x^2",
                 "latexDisplay": "x^2"
             },
@@ -402,7 +404,8 @@
                 "latexDisplay": "\\square_\\square"
             }
         ],
-        "root": [{
+        "root": [
+            {
                 "latexCmd": "\\sqrt",
                 "latexDisplay": "\\sqrt{\\square}"
             },
@@ -419,7 +422,8 @@
                 "latexDisplay": "\\sqrt[4]{a}"
             }
         ],
-        "frac": [{
+        "frac": [
+            {
             "latex": "\\frac{ }{ }",
             "latexDisplay": "\\frac{\\square}{\\square}"
         }],
@@ -450,13 +454,13 @@
     },
     "advancedSymbols": [
         {
-            "latexText": "\\begin{vmatrix} a&b\\\\ c&d\\\\ \\end{vmatrix}"
+            "latexText": "\\begin{vmatrix} a&b\\\\ c&d \\end{vmatrix}"
         },
         {
-            "latexText": "\\begin{matrix} a&b\\\\ c&d\\\\ \\end{matrix}"
+            "latexText": "\\begin{matrix} a&b\\\\ c&d \\end{matrix}"
         },
         {
-            "latexText": "\\begin{bmatrix} a&b\\\\ c&d\\\\ \\end{bmatrix}"
+            "latexText": "\\begin{bmatrix} a&b\\\\ c&d \\end{bmatrix}"
         },
         {
             "latexText": "\\xrightarrow{\\Delta}"
@@ -465,18 +469,10 @@
             "latexText": "\\sphericalangle"
         },
         {
-            "latexText": "\\xleftrightharpoons{abc}",
-            "customImage": "assets/equilibrium.png"
-        },
-        {
             "latexText": "\\leftrightarrows"
         },
         {
             "latexText": "\\widetilde{a}"
-        },
-        {
-            "latexText": "\\overgroup{AB}",
-            "customImage": "assets/arc.png"
         }
     ],
     "advancedTabImageArray": []
