@@ -4,13 +4,10 @@
         <b-button v-b-modal.mathModal>Equation</b-button> -->
 
         <b-modal class="mathModal"  id="mathModal"
-                    hide-backdrop
                     title="BootstrapVue"
                     :scrollable=true
                     :hide-footer=true
                     :hide-header=true
-                    :no-close-on-backdrop=true
-                    :no-close-on-esc=true
                     ref="mathModal" 
                     :no-fade=true
                     @shown="handleModalInitialization()">
@@ -363,8 +360,6 @@ export default {
             this.valid = false
             this.text_hint = true
             this.activeTab = ''
-            window.frames.frameElement.nextSibling.remove()
-            window.frames.window.frameElement.remove()
             this.resetStatusIndicator()
         },
 
@@ -583,8 +578,10 @@ export default {
 }
 </script>
 
-<style scoped="css">
-@import '../../custom_bootstrap/public/app.css';
+<style scoped lang="scss">
+/deep/ {
+    @import '../assets/main'
+}
 
 .modal-close-btn {
     position: absolute;

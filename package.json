@@ -6,7 +6,7 @@
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
-        "deploy": "npm run build && cp -R dist/ ../popupui"
+        "deploy": "npm run build && cp -R dist/ ../plugin/popupui"
     },
     "dependencies": {
         "bootstrap": "^4.4.1",
