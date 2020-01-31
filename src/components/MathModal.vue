@@ -232,7 +232,6 @@ mathtext_plugin.prototype.modal = function(data) {
 
 window.mathModal.ckeditor.mathtext = new mathtext_plugin()
 mathtext_plugin = undefined
-const hostURL = window.origin || 'http://localhost:3000'
 
 export default {
     name: 'MathModal',
@@ -535,6 +534,7 @@ export default {
         },
 
         async generateLatexToPng(latexText) {
+            const hostURL = (window.mathApiHost) ? window.mathApiHost : (window.origin) ? window.origin : 'http://localhost:3000'
             let that = this;
             return new Promise(function(resolve, reject) {
                 var imgUrl = "";
