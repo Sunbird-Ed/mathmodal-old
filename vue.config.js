@@ -7,5 +7,12 @@ module.exports = {
       splitChunks: false
     },
     //plugins: [new BundleAnalyzerPlugin()]
+  },
+  filenameHashing: false,
+  pages: {
+    mathmodal: {
+      entry: './src/main.js',
+      filename: 'index.html'
+    }
   }
 }
