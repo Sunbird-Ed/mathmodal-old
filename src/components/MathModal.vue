@@ -17,7 +17,7 @@
             </slot>
             
             <b-card no-body>
-                <b-tabs content-class="mt-3" justified small card   >
+                <b-tabs justified small card   >
                     <b-tab title="Library" active @click=changeTab>
                         <div class="item select list-items math-lib" 
                             @click=latexToEquations(item.equation)
@@ -756,6 +756,6 @@ font-size: 1.8em;
     overflow: auto;
 }
 .modal-dialog-scrollable .modal-body {
-    overflow-y: hidden;
+    overflow-y: hidden !important;
 }
 </style>
