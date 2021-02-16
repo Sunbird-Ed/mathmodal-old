@@ -317,6 +317,9 @@
             },
             {
                 "latex": "\\hat{x}"
+            },
+            {
+                "latex": "\\degree"
             }
         ]
     },
